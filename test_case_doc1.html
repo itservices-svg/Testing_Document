@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Case Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .summary-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px 30px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .tester-info {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .tester-info input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .tester-info label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .report-date {
+            text-align: right;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .report-date strong {
+            color: #333;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            border-left: 4px solid;
+        }
+
+        .stat-card.total {
+            border-left-color: #667eea;
+        }
+
+        .stat-card.passed {
+            border-left-color: #28a745;
+        }
+
+        .stat-card.failed {
+            border-left-color: #dc3545;
+        }
+
+        .stat-card.pending {
+            border-left-color: #ffc107;
+        }
+
+        .stat-card.resolved {
+            border-left-color: #17a2b8;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .stat-card.total .stat-number { color: #667eea; }
+        .stat-card.passed .stat-number { color: #28a745; }
+        .stat-card.failed .stat-number { color: #dc3545; }
+        .stat-card.pending .stat-number { color: #ffc107; }
+        .stat-card.resolved .stat-number { color: #17a2b8; }
+
+        .content {
+            padding: 30px;
+        }
+
+        .test-case {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .test-case.status-pass {
+            background: linear-gradient(135deg, #d4edda 0%, #e8f5e9 100%);
+            border-left-color: #28a745;
+        }
+
+        .test-case.status-fail {
+            background: linear-gradient(135deg, #f8d7da 0%, #ffe5e5 100%);
+            border-left-color: #dc3545;
+        }
+
+        .test-case.status-pending {
+            background: linear-gradient(135deg, #fff3cd 0%, #fff8e1 100%);
+            border-left-color: #ffc107;
+        }
+
+        .test-case-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .status-dropdown {
+            padding: 8px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .status-dropdown.status-pass {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .status-dropdown.status-fail {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .status-dropdown.status-pending {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .screenshot-area {
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            background: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .screenshot-area:hover {
+            background: #f0f4ff;
+        }
+
+        .screenshot-area.dragover {
+            background: #e8f0ff;
+            border-color: #4a5fd9;
+        }
+
+        .screenshots-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .screenshot-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-width: 100%;
+            background: white;
+        }
+
+        .screenshot-item img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            max-height: 400px;
+            object-fit: contain;
+        }
+
+        .screenshot-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(231, 76, 60, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+            transition: background 0.3s;
+        }
+
+        .screenshot-remove:hover {
+            background: rgba(192, 57, 43, 0.9);
+        }
+
+        .add-test-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+
+        .add-test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .save-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .save-status.show {
+            opacity: 1;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-text {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .test-type-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .type-functional { background: #e3f2fd; color: #1976d2; }
+        .type-integration { background: #f3e5f5; color: #7b1fa2; }
+        .type-regression { background: #fff3e0; color: #e65100; }
+        .type-smoke { background: #e8f5e9; color: #2e7d32; }
+        .type-performance { background: #fce4ec; color: #c2185b; }
+        .type-security { background: #ffebee; color: #c62828; }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .status-pass {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+
+        .status-fail {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffc107;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .indicator-pass { background: #28a745; }
+        .indicator-fail { background: #dc3545; }
+        .indicator-pending { background: #ffc107; }
+
+        .developer-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(220, 53, 69, 0.1);
+            border-radius: 8px;
+            border: 2px solid #dc3545;
+        }
+
+        .developer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .developer-header h4 {
+            color: #dc3545;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .resolution-toggle {
+            display: flex;
+            gap: 10px;
+        }
+
+        .resolution-btn {
+            padding: 6px 15px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .resolution-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .resolution-btn.active-resolved {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .resolution-btn.active-not-resolved {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .developer-comments {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .developer-comments:focus {
+            outline: none;
+            border-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Test Case Documentation</h1>
+            <p>Add screenshots, test scenarios, and steps - Auto-saved!</p>
+        </div>
+        
+        <div class="summary-section">
+            <div class="summary-header">
+                <div class="tester-info">
+                    <label>Tester Name</label>
+                    <input type="text" id="testerName" placeholder="Enter your name..." 
+                           onchange="updateTesterInfo('testerName', this.value)">
+                </div>
+                <div class="report-date">
+                    <strong>Last Updated:</strong><br>
+                    <span id="lastUpdated">Never</span>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card total">
+                    <div class="stat-number" id="totalTests">0</div>
+                    <div class="stat-label">Total Tests</div>
+                </div>
+                <div class="stat-card passed">
+                    <div class="stat-number" id="passedTests">0</div>
+                    <div class="stat-label">Passed</div>
+                </div>
+                <div class="stat-card failed">
+                    <div class="stat-number" id="failedTests">0</div>
+                    <div class="stat-label">Failed</div>
+                </div>
+                <div class="stat-card pending">
+                    <div class="stat-number" id="pendingTests">0</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+                <div class="stat-card resolved">
+                    <div class="stat-number" id="resolvedTests">0</div>
+                    <div class="stat-label">Resolved Issues</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div id="testCasesContainer"></div>
+            
+            <button class="add-test-btn" onclick="addTestCase()">+ Add New Test Case</button>
+        </div>
+    </div>
+
+    <div class="save-status" id="saveStatus">✓ Saved</div>
+
+    <script>
+        let testCases = [];
+        let testerInfo = { testerName: '', lastUpdated: null };
+        let saveTimeout;
+
+        window.addEventListener('DOMContentLoaded', loadTestCases);
+
+        function loadTestCases() {
+            const saved = sessionStorage.getItem('testCases');
+            const savedInfo = sessionStorage.getItem('testerInfo');
+            
+            if (saved) {
+                testCases = JSON.parse(saved);
+            } else {
+                addTestCase();
+            }
+            
+            if (savedInfo) {
+                testerInfo = JSON.parse(savedInfo);
+                document.getElementById('testerName').value = testerInfo.testerName || '';
+            }
+            
+            renderTestCases();
+            updateSummary();
+        }
+
+        function saveTestCases() {
+            testerInfo.lastUpdated = new Date().toISOString();
+            sessionStorage.setItem('testCases', JSON.stringify(testCases));
+            sessionStorage.setItem('testerInfo', JSON.stringify(testerInfo));
+            updateSummary();
+            showSaveStatus();
+        }
+
+        function showSaveStatus() {
+            const status = document.getElementById('saveStatus');
+            status.classList.add('show');
+            setTimeout(() => status.classList.remove('show'), 2000);
+        }
+
+        function autoSave() {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(saveTestCases, 500);
+        }
+
+        function updateTesterInfo(field, value) {
+            testerInfo[field] = value;
+            saveTestCases();
+        }
+
+        function updateSummary() {
+            const total = testCases.length;
+            const passed = testCases.filter(tc => tc.status === 'pass').length;
+            const failed = testCases.filter(tc => tc.status === 'fail').length;
+            const pending = testCases.filter(tc => tc.status === 'pending').length;
+            const resolved = testCases.filter(tc => tc.status === 'fail' && tc.resolved).length;
+            
+            document.getElementById('totalTests').textContent = total;
+            document.getElementById('passedTests').textContent = passed;
+            document.getElementById('failedTests').textContent = failed;
+            document.getElementById('pendingTests').textContent = pending;
+            document.getElementById('resolvedTests').textContent = resolved;
+            
+            if (testerInfo.lastUpdated) {
+                const date = new Date(testerInfo.lastUpdated);
+                const formatted = date.toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                document.getElementById('lastUpdated').textContent = formatted;
+            }
+        }
+
+        function addTestCase() {
+            const newTestCase = {
+                id: Date.now(),
+                scenario: '',
+                steps: '',
+                expected: '',
+                actual: '',
+                type: 'functional',
+                status: 'pending',
+                screenshots: [],
+                developerComments: '',
+                resolved: false
+            };
+            testCases.push(newTestCase);
+            renderTestCases();
+            saveTestCases();
+        }
+
+        function deleteTestCase(id) {
+            if (confirm('Are you sure you want to delete this test case?')) {
+                testCases = testCases.filter(tc => tc.id !== id);
+                renderTestCases();
+                saveTestCases();
+            }
+        }
+
+        function updateTestCase(id, field, value) {
+            const testCase = testCases.find(tc => tc.id === id);
+            if (testCase) {
+                testCase[field] = value;
+                autoSave();
+            }
+        }
+
+        function handleFileUpload(id, files) {
+            const testCase = testCases.find(tc => tc.id === id);
+            if (!testCase) return;
+
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        testCase.screenshots.push(e.target.result);
+                        renderTestCases();
+                        saveTestCases();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function handlePaste(id, e) {
+            const items = e.clipboardData.items;
+            for (let item of items) {
+                if (item.type.indexOf('image') !== -1) {
+                    const file = item.getAsFile();
+                    handleFileUpload(id, [file]);
+                }
+            }
+        }
+
+        function removeScreenshot(testCaseId, screenshotIndex) {
+            const testCase = testCases.find(tc => tc.id === testCaseId);
+            if (testCase) {
+                testCase.screenshots.splice(screenshotIndex, 1);
+                renderTestCases();
+                saveTestCases();
+            }
+        }
+
+        function renderTestCases() {
+            const container = document.getElementById('testCasesContainer');
+            container.innerHTML = testCases.map(tc => `
+                <div class="test-case status-${tc.status}">
+                    <div class="test-case-header">
+                        <div class="header-left">
+                            <h3>Test Case #${testCases.indexOf(tc) + 1}</h3>
+                        </div>
+                        <div class="header-buttons">
+                            <select class="status-dropdown status-${tc.status}" 
+                                    onchange="updateTestCase(${tc.id}, 'status', this.value); renderTestCases()">
+                                <option value="pending" ${tc.status === 'pending' ? 'selected' : ''}>⏳ Pending</option>
+                                <option value="pass" ${tc.status === 'pass' ? 'selected' : ''}>✓ Pass</option>
+                                <option value="fail" ${tc.status === 'fail' ? 'selected' : ''}>✗ Fail</option>
+                            </select>
+                            <button class="delete-btn" onclick="deleteTestCase(${tc.id})">Delete</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Test Type</label>
+                        <select onchange="updateTestCase(${tc.id}, 'type', this.value)" value="${tc.type}">
+                            <option value="functional" ${tc.type === 'functional' ? 'selected' : ''}>Functional Testing</option>
+                            <option value="integration" ${tc.type === 'integration' ? 'selected' : ''}>Integration Testing</option>
+                            <option value="regression" ${tc.type === 'regression' ? 'selected' : ''}>Regression Testing</option>
+                            <option value="smoke" ${tc.type === 'smoke' ? 'selected' : ''}>Smoke Testing</option>
+                            <option value="performance" ${tc.type === 'performance' ? 'selected' : ''}>Performance Testing</option>
+                            <option value="security" ${tc.type === 'security' ? 'selected' : ''}>Security Testing</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Test Scenario</label>
+                        <input type="text" placeholder="Describe the test scenario..." 
+                               value="${tc.scenario}" 
+                               onchange="updateTestCase(${tc.id}, 'scenario', this.value)">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Test Steps</label>
+                        <textarea placeholder="1. Step one&#10;2. Step two&#10;3. Step three..." 
+                                  onchange="updateTestCase(${tc.id}, 'steps', this.value)">${tc.steps}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Expected Results</label>
+                        <textarea placeholder="Describe what should happen..." 
+                                  onchange="updateTestCase(${tc.id}, 'expected', this.value)">${tc.expected}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Actual Results</label>
+                        <textarea placeholder="Describe what actually happened..." 
+                                  onchange="updateTestCase(${tc.id}, 'actual', this.value)">${tc.actual}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Screenshots</label>
+                        <div class="screenshot-area" 
+                             onclick="document.getElementById('file-${tc.id}').click()"
+                             ondragover="event.preventDefault(); this.classList.add('dragover')"
+                             ondragleave="this.classList.remove('dragover')"
+                             ondrop="event.preventDefault(); this.classList.remove('dragover'); handleFileUpload(${tc.id}, event.dataTransfer.files)"
+                             onpaste="handlePaste(${tc.id}, event)">
+                            <p class="upload-text">📷 Click to upload, drag & drop, or paste (Ctrl+V) screenshots</p>
+                            <input type="file" id="file-${tc.id}" class="file-input" 
+                                   accept="image/*" multiple 
+                                   onchange="handleFileUpload(${tc.id}, this.files)">
+                        </div>
+                        ${tc.screenshots.length > 0 ? `
+                            <div class="screenshots-grid">
+                                ${tc.screenshots.map((src, index) => `
+                                    <div class="screenshot-item">
+                                        <img src="${src}" alt="Screenshot ${index + 1}">
+                                        <button class="screenshot-remove" 
+                                                onclick="removeScreenshot(${tc.id}, ${index})">×</button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    ${tc.status === 'fail' ? `
+                        <div class="developer-section">
+                            <div class="developer-header">
+                                <h4>👨‍💻 Developer Section</h4>
+                                <div class="resolution-toggle">
+                                    <button class="resolution-btn ${!tc.resolved ? 'active-not-resolved' : ''}" 
+                                            onclick="updateTestCase(${tc.id}, 'resolved', false); renderTestCases()">
+                                        Not Resolved
+                                    </button>
+                                    <button class="resolution-btn ${tc.resolved ? 'active-resolved' : ''}" 
+                                            onclick="updateTestCase(${tc.id}, 'resolved', true); renderTestCases()">
+                                        Resolved
+                                    </button>
+                                </div>
+                            </div>
+                            <textarea class="developer-comments" 
+                                      placeholder="Developer comments: Add notes about the issue, root cause, fix details, etc..."
+                                      onchange="updateTestCase(${tc.id}, 'developerComments', this.value)">${tc.developerComments || ''}</textarea>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+            
+            updateSummary();
+        }
+    </script>
+</body>
+</html>
