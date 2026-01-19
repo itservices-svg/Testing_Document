@@ -5,19 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Case Documentation</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -26,25 +20,207 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
         }
-
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 30px;
             text-align: center;
+            position: relative;
         }
-
-        .header h1 {
-            font-size: 2em;
-            margin-bottom: 10px;
+        .header h1 { font-size: 2em; margin-bottom: 10px; }
+        .role-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
         }
-
+        .role-badge.tester { background: #28a745; color: white; }
+        .role-badge.developer { background: #17a2b8; color: white; }
+        .logout-btn {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .logout-btn:hover { background: rgba(255,255,255,0.3); }
+        .config-banner {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .config-banner.hidden { display: none; }
+        .config-banner strong { color: #856404; }
+        .config-input {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            max-width: 600px;
+            border: 2px solid #ffc107;
+            border-radius: 5px;
+        }
+        .config-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .login-modal.hidden { display: none; }
+        .login-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .login-content h2 { color: #667eea; margin-bottom: 25px; text-align: center; }
+        .role-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .role-option {
+            flex: 1;
+            padding: 20px;
+            border: 3px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .role-option:hover { border-color: #667eea; background: #f0f4ff; }
+        .role-option.selected { border-color: #667eea; background: #e8f0ff; }
+        .role-option.tester.selected { border-color: #28a745; background: #e8f5e9; }
+        .role-option.developer.selected { border-color: #17a2b8; background: #e0f7fa; }
+        .role-option h3 { margin-bottom: 10px; font-size: 18px; }
+        .role-option p { font-size: 13px; color: #666; }
+        .login-form { display: flex; flex-direction: column; gap: 20px; }
+        .login-form input {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .login-form input:focus { outline: none; border-color: #667eea; }
+        .login-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .login-btn:hover { transform: translateY(-2px); }
+        .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .setup-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .setup-modal.hidden { display: none; }
+        .setup-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .setup-content h2 { color: #667eea; margin-bottom: 10px; text-align: center; }
+        .setup-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .setup-tab {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: #666;
+        }
+        .setup-tab:hover { border-color: #667eea; background: #f0f4ff; }
+        .setup-tab.active { 
+            border-color: #667eea; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .setup-tab-content {
+            display: none;
+        }
+        .setup-tab-content.active {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .setup-form { display: flex; flex-direction: column; gap: 20px; }
+        .setup-form input {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .setup-form input:focus { outline: none; border-color: #667eea; }
+        .setup-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .setup-btn:hover { transform: translateY(-2px); }
         .summary-section {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             padding: 25px 30px;
             border-bottom: 3px solid #667eea;
         }
-
         .summary-header {
             display: flex;
             justify-content: space-between;
@@ -53,44 +229,35 @@
             flex-wrap: wrap;
             gap: 20px;
         }
-
-        .tester-info {
-            flex: 1;
-            min-width: 250px;
-        }
-
-        .tester-info input {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
+        .tester-info { flex: 1; min-width: 250px; }
+        .tester-display {
+            background: white;
+            padding: 15px;
             border-radius: 8px;
-            font-size: 14px;
-            margin-top: 5px;
+            border: 2px solid #667eea;
         }
-
-        .tester-info label {
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
+        .tester-display p { margin: 5px 0; color: #333; }
+        .tester-display strong { color: #667eea; }
+        .edit-info-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-top: 10px;
+            transition: background 0.3s;
         }
-
-        .report-date {
-            text-align: right;
-            color: #666;
-            font-size: 14px;
-        }
-
-        .report-date strong {
-            color: #333;
-        }
-
+        .edit-info-btn:hover { background: #5568d3; }
+        .report-date { text-align: right; color: #666; font-size: 14px; }
+        .report-date strong { color: #333; }
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
             margin-top: 20px;
         }
-
         .stat-card {
             background: white;
             padding: 20px;
@@ -98,175 +265,103 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             text-align: center;
             border-left: 4px solid;
+            transition: all 0.3s;
         }
-
-        .stat-card.total {
-            border-left-color: #667eea;
-        }
-
-        .stat-card.passed {
-            border-left-color: #28a745;
-        }
-
-        .stat-card.failed {
-            border-left-color: #dc3545;
-        }
-
-        .stat-card.pending {
-            border-left-color: #ffc107;
-        }
-
-        .stat-card.resolved {
-            border-left-color: #17a2b8;
-        }
-
-        .stat-number {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .stat-card.total { border-left-color: #667eea; }
+        .stat-card.passed { border-left-color: #28a745; }
+        .stat-card.failed { border-left-color: #dc3545; }
+        .stat-card.deleted { border-left-color: #6c757d; }
+        .stat-card.resolved { border-left-color: #17a2b8; }
+        .stat-number { font-size: 2.5em; font-weight: 700; margin-bottom: 5px; }
+        .stat-label { color: #666; font-size: 14px; font-weight: 600; text-transform: uppercase; }
         .stat-card.total .stat-number { color: #667eea; }
         .stat-card.passed .stat-number { color: #28a745; }
         .stat-card.failed .stat-number { color: #dc3545; }
-        .stat-card.pending .stat-number { color: #ffc107; }
+        .stat-card.deleted .stat-number { color: #6c757d; }
         .stat-card.resolved .stat-number { color: #17a2b8; }
-
-        .content {
-            padding: 30px;
+        .filter-buttons { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
         }
-
+        .filter-btn:hover { transform: translateY(-2px); }
+        .filter-btn.all { border-color: #667eea; color: #667eea; }
+        .filter-btn.all.active { background: #667eea; color: white; }
+        .filter-btn.passed { border-color: #28a745; color: #28a745; }
+        .filter-btn.passed.active { background: #28a745; color: white; }
+        .filter-btn.failed { border-color: #dc3545; color: #dc3545; }
+        .filter-btn.failed.active { background: #dc3545; color: white; }
+        .filter-btn.deleted { border-color: #6c757d; color: #6c757d; }
+        .filter-btn.deleted.active { background: #6c757d; color: white; }
+        .content { padding: 30px; }
+        .section-title {
+            font-size: 1.8em;
+            color: #333;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid;
+        }
+        .section-title.passed { border-bottom-color: #28a745; color: #28a745; }
+        .section-title.failed { border-bottom-color: #dc3545; color: #dc3545; }
+        .section-title.deleted { border-bottom-color: #6c757d; color: #6c757d; }
+        .section-hidden { display: none !important; }
         .test-case {
             background: #f8f9fa;
             border-radius: 10px;
             padding: 25px;
             margin-bottom: 20px;
-            border-left: 5px solid #667eea;
-            position: relative;
-            transition: all 0.3s;
+            border-left: 5px solid;
         }
-
-        .test-case.status-pass {
-            background: linear-gradient(135deg, #d4edda 0%, #e8f5e9 100%);
-            border-left-color: #28a745;
-        }
-
-        .test-case.status-fail {
-            background: linear-gradient(135deg, #f8d7da 0%, #ffe5e5 100%);
-            border-left-color: #dc3545;
-        }
-
-        .test-case.status-pending {
-            background: linear-gradient(135deg, #fff3cd 0%, #fff8e1 100%);
-            border-left-color: #ffc107;
-        }
-
-        .test-case-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            gap: 10px;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .header-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .status-dropdown {
+        .test-case.status-pass { background: linear-gradient(135deg, #d4edda 0%, #e8f5e9 100%); border-left-color: #28a745; }
+        .test-case.status-fail { background: linear-gradient(135deg, #f8d7da 0%, #ffe5e5 100%); border-left-color: #dc3545; }
+        .test-case.status-deleted { background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%); border-left-color: #6c757d; }
+        .test-case-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 10px; flex-wrap: wrap; }
+        .header-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+        .action-btn {
             padding: 8px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s;
-            background: white;
-        }
-
-        .status-dropdown.status-pass {
-            background: #d4edda;
-            border-color: #28a745;
-            color: #155724;
-        }
-
-        .status-dropdown.status-fail {
-            background: #f8d7da;
-            border-color: #dc3545;
-            color: #721c24;
-        }
-
-        .status-dropdown.status-pending {
-            background: #fff3cd;
-            border-color: #ffc107;
-            color: #856404;
-        }
-
-        .delete-btn {
-            background: #e74c3c;
-            color: white;
             border: none;
-            padding: 8px 15px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 14px;
-            transition: background 0.3s;
-        }
-
-        .delete-btn:hover {
-            background: #c0392b;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
             font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 14px;
+            color: white;
+            transition: all 0.3s;
         }
-
-        input[type="text"],
-        select,
-        textarea {
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .pass-btn { background: #28a745; }
+        .pass-btn:hover:not(:disabled) { background: #218838; }
+        .fail-btn { background: #dc3545; }
+        .fail-btn:hover:not(:disabled) { background: #c82333; }
+        .delete-btn { background: #6c757d; }
+        .delete-btn:hover:not(:disabled) { background: #5a6268; }
+        .restore-btn { background: #17a2b8; }
+        .restore-btn:hover:not(:disabled) { background: #138496; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; color: #333; margin-bottom: 8px; font-size: 14px; }
+        input[type="text"], select, textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 14px;
-            transition: border-color 0.3s;
             font-family: inherit;
         }
-
-        input[type="text"]:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #667eea;
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #667eea; }
+        textarea { resize: vertical; min-height: 100px; }
+        .readonly-field {
+            background: #f5f5f5;
+            cursor: not-allowed;
         }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
         .screenshot-area {
             border: 2px dashed #667eea;
             border-radius: 8px;
@@ -274,42 +369,22 @@
             text-align: center;
             background: white;
             cursor: pointer;
-            transition: background 0.3s;
         }
-
-        .screenshot-area:hover {
-            background: #f0f4ff;
+        .screenshot-area:hover { background: #f0f4ff; }
+        .screenshot-area.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
         }
-
-        .screenshot-area.dragover {
-            background: #e8f0ff;
-            border-color: #4a5fd9;
-        }
-
-        .screenshots-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
+        .screenshots-grid { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px; }
         .screenshot-item {
             position: relative;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            max-width: 100%;
             background: white;
         }
-
-        .screenshot-item img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            max-height: 400px;
-            object-fit: contain;
-        }
-
+        .screenshot-item img { max-width: 100%; height: auto; display: block; max-height: 400px; object-fit: contain; }
         .screenshot-remove {
             position: absolute;
             top: 5px;
@@ -322,14 +397,7 @@
             height: 25px;
             cursor: pointer;
             font-size: 16px;
-            line-height: 1;
-            transition: background 0.3s;
         }
-
-        .screenshot-remove:hover {
-            background: rgba(192, 57, 43, 0.9);
-        }
-
         .add-test-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -341,14 +409,11 @@
             font-weight: 600;
             width: 100%;
             margin-top: 20px;
-            transition: transform 0.2s;
         }
-
-        .add-test-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        .add-test-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
-
         .save-status {
             position: fixed;
             bottom: 20px;
@@ -361,75 +426,9 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
-
-        .save-status.show {
-            opacity: 1;
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .upload-text {
-            color: #667eea;
-            font-weight: 600;
-        }
-
-        .test-type-badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 5px;
-        }
-
-        .type-functional { background: #e3f2fd; color: #1976d2; }
-        .type-integration { background: #f3e5f5; color: #7b1fa2; }
-        .type-regression { background: #fff3e0; color: #e65100; }
-        .type-smoke { background: #e8f5e9; color: #2e7d32; }
-        .type-performance { background: #fce4ec; color: #c2185b; }
-        .type-security { background: #ffebee; color: #c62828; }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .status-pass {
-            background: #d4edda;
-            color: #155724;
-            border: 2px solid #28a745;
-        }
-
-        .status-fail {
-            background: #f8d7da;
-            color: #721c24;
-            border: 2px solid #dc3545;
-        }
-
-        .status-pending {
-            background: #fff3cd;
-            color: #856404;
-            border: 2px solid #ffc107;
-        }
-
-        .status-indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        .indicator-pass { background: #28a745; }
-        .indicator-fail { background: #dc3545; }
-        .indicator-pending { background: #ffc107; }
-
+        .save-status.show { opacity: 1; }
+        .save-status.error { background: #dc3545; }
+        .file-input { display: none; }
         .developer-section {
             margin-top: 25px;
             padding: 20px;
@@ -437,27 +436,9 @@
             border-radius: 8px;
             border: 2px solid #dc3545;
         }
-
-        .developer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .developer-header h4 {
-            color: #dc3545;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .resolution-toggle {
-            display: flex;
-            gap: 10px;
-        }
-
+        .developer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; }
+        .developer-header h4 { color: #dc3545; font-size: 16px; }
+        .resolution-toggle { display: flex; gap: 10px; }
         .resolution-btn {
             padding: 6px 15px;
             border: 2px solid #e0e0e0;
@@ -466,25 +447,13 @@
             cursor: pointer;
             font-size: 13px;
             font-weight: 600;
-            transition: all 0.3s;
         }
-
-        .resolution-btn:hover {
-            transform: translateY(-1px);
+        .resolution-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
-
-        .resolution-btn.active-resolved {
-            background: #d4edda;
-            border-color: #28a745;
-            color: #155724;
-        }
-
-        .resolution-btn.active-not-resolved {
-            background: #f8d7da;
-            border-color: #dc3545;
-            color: #721c24;
-        }
-
+        .resolution-btn.active-resolved { background: #d4edda; border-color: #28a745; color: #155724; }
+        .resolution-btn.active-not-resolved { background: #f8d7da; border-color: #dc3545; color: #721c24; }
         .developer-comments {
             width: 100%;
             min-height: 80px;
@@ -493,28 +462,140 @@
             border-radius: 8px;
             font-size: 14px;
             font-family: inherit;
-            resize: vertical;
         }
-
-        .developer-comments:focus {
-            outline: none;
-            border-color: #dc3545;
+        .empty-section { text-align: center; padding: 40px; color: #999; font-style: italic; }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        .loading-overlay.hidden { display: none; }
+        .loading-spinner {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .permission-notice {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #856404;
         }
     </style>
 </head>
 <body>
+    <div class="config-banner" id="configBanner">
+        <strong>⚙️ Setup Required!</strong><br>
+        <p style="margin: 10px 0;">Enter your Google Apps Script Web App URL:</p>
+        <input type="text" id="apiUrlInput" class="config-input" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
+        <br>
+        <button class="config-btn" onclick="saveApiUrl()">Save API URL</button>
+        <button class="config-btn" onclick="document.getElementById('configBanner').classList.add('hidden')" style="background: #6c757d;">Skip for Now</button>
+    </div>
+
+    <div class="loading-overlay hidden" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading data from Google Sheets...</p>
+        </div>
+    </div>
+
+    <div class="login-modal" id="loginModal">
+        <div class="login-content">
+            <h2>🔐 Login to System</h2>
+            <div class="role-selector">
+                <div class="role-option tester" onclick="selectRole('tester')">
+                    <h3>👨‍💼 Tester</h3>
+                    <p>Full access to create, edit, and manage test cases</p>
+                </div>
+                <div class="role-option developer" onclick="selectRole('developer')">
+                    <h3>👨‍💻 Developer</h3>
+                    <p>View tests and add comments on failed cases</p>
+                </div>
+            </div>
+            <div class="login-form" id="loginForm">
+                <input type="text" id="loginUsername" placeholder="Enter username">
+                <input type="password" id="loginPassword" placeholder="Enter password">
+                <button class="login-btn" id="loginBtn" onclick="handleLogin()" disabled>Login</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="setup-modal hidden" id="setupModal">
+        <div class="setup-content">
+            <h2>📋 Initial System Setup</h2>
+            <p style="text-align: center; margin-bottom: 20px; color: #666;">Create your accounts</p>
+            
+            <div class="setup-tabs">
+                <button class="setup-tab active" onclick="switchSetupTab('tester')">
+                    👨‍💼 Tester Account
+                </button>
+                <button class="setup-tab" onclick="switchSetupTab('developer')">
+                    👨‍💻 Developer Account
+                </button>
+            </div>
+            
+            <div class="setup-form">
+                <!-- Tester Form -->
+                <div id="testerSetupForm" class="setup-tab-content active">
+                    <input type="text" id="setupTesterName" placeholder="Tester name *">
+                    <input type="text" id="setupTesterUsername" placeholder="Tester username *">
+                    <input type="password" id="setupTesterPassword" placeholder="Tester password *">
+                    <input type="text" id="setupDesignation" placeholder="Tester designation *">
+                    <input type="text" id="setupProject" placeholder="Project name *">
+                </div>
+                
+                <!-- Developer Form -->
+                <div id="developerSetupForm" class="setup-tab-content">
+                    <input type="text" id="setupDevUsername" placeholder="Developer username *">
+                    <input type="password" id="setupDevPassword" placeholder="Developer password *">
+                </div>
+                
+                <button class="setup-btn" id="saveSetupBtn">Create Accounts & Continue</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="header">
             <h1>📋 Test Case Documentation</h1>
-            <p>Add screenshots, test scenarios, and steps - Auto-saved!</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Connected to Google Sheets Database</p>
+            <div class="role-badge" id="roleBadge">Guest</div>
+            <button class="logout-btn" id="logoutBtn" onclick="handleLogout()">Logout</button>
         </div>
         
         <div class="summary-section">
             <div class="summary-header">
                 <div class="tester-info">
-                    <label>Tester Name</label>
-                    <input type="text" id="testerName" placeholder="Enter your name..." 
-                           onchange="updateTesterInfo('testerName', this.value)">
+                    <div class="tester-display">
+                        <p><strong>Tester:</strong> <span id="displayName">-</span></p>
+                        <p><strong>Designation:</strong> <span id="displayDesignation">-</span></p>
+                        <p><strong>Project:</strong> <span id="displayProject">-</span></p>
+                    </div>
                 </div>
                 <div class="report-date">
                     <strong>Last Updated:</strong><br>
@@ -535,9 +616,9 @@
                     <div class="stat-number" id="failedTests">0</div>
                     <div class="stat-label">Failed</div>
                 </div>
-                <div class="stat-card pending">
-                    <div class="stat-number" id="pendingTests">0</div>
-                    <div class="stat-label">Pending</div>
+                <div class="stat-card deleted">
+                    <div class="stat-number" id="deletedTests">0</div>
+                    <div class="stat-label">Deleted</div>
                 </div>
                 <div class="stat-card resolved">
                     <div class="stat-number" id="resolvedTests">0</div>
@@ -547,182 +628,650 @@
         </div>
         
         <div class="content">
-            <div id="testCasesContainer"></div>
+            <div id="devNotice" class="permission-notice" style="display: none;">
+                <strong>👨‍💻 Developer Mode:</strong> You can view all tests and add comments/mark resolution on failed tests only.
+            </div>
             
-            <button class="add-test-btn" onclick="addTestCase()">+ Add New Test Case</button>
+            <div class="filter-buttons">
+                <button class="filter-btn all active" data-filter="all">📋 All Tests</button>
+                <button class="filter-btn passed" data-filter="pass">✓ Passed Only</button>
+                <button class="filter-btn failed" data-filter="fail">✗ Failed Only</button>
+                <button class="filter-btn deleted" data-filter="deleted">🗑️ Deleted Only</button>
+            </div>
+
+            <button class="add-test-btn" id="addTestBtn">+ Add New Test Case</button>
+
+            <h2 class="section-title passed" id="passedSection">✓ Passed Tests</h2>
+            <div id="passedContainer"></div>
+
+            <h2 class="section-title failed" id="failedSection">✗ Failed Tests</h2>
+            <div id="failedContainer"></div>
+
+            <h2 class="section-title deleted" id="deletedSection">🗑️ Deleted Tests</h2>
+            <div id="deletedContainer"></div>
         </div>
     </div>
 
     <div class="save-status" id="saveStatus">✓ Saved</div>
 
     <script>
-        let testCases = [];
-        let testerInfo = { testerName: '', lastUpdated: null };
-        let saveTimeout;
+        const APP = {
+            testCases: [],
+            systemInfo: {
+                testerName: '',
+                designation: '',
+                project: '',
+                testerUsername: '',
+                testerPassword: '',
+                devUsername: '',
+                devPassword: '',
+                lastUpdated: null
+            },
+            currentUser: {
+                role: null, // 'tester' or 'developer'
+                username: null
+            },
+            saveTimeout: null,
+            isSetupComplete: false,
+            apiUrl: '',
+            currentSetupTab: 'tester'
+        };
 
-        window.addEventListener('DOMContentLoaded', loadTestCases);
-
-        function loadTestCases() {
-            const saved = sessionStorage.getItem('testCases');
-            const savedInfo = sessionStorage.getItem('testerInfo');
+        function switchSetupTab(tab) {
+            APP.currentSetupTab = tab;
             
-            if (saved) {
-                testCases = JSON.parse(saved);
+            // Update tabs
+            document.querySelectorAll('.setup-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.setup-tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            if (tab === 'tester') {
+                document.getElementById('testerSetupForm').classList.add('active');
             } else {
-                addTestCase();
+                document.getElementById('developerSetupForm').classList.add('active');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            loadApiUrl();
+            await loadData();
+            setupEventListeners();
+            
+            if (!APP.isSetupComplete) {
+                document.getElementById('setupModal').classList.remove('hidden');
+                document.getElementById('loginModal').classList.add('hidden');
+            } else if (!APP.currentUser.role) {
+                document.getElementById('loginModal').classList.remove('hidden');
             }
             
-            if (savedInfo) {
-                testerInfo = JSON.parse(savedInfo);
-                document.getElementById('testerName').value = testerInfo.testerName || '';
+            render();
+        });
+
+        function loadApiUrl() {
+            const savedUrl = localStorage.getItem('apiUrl');
+            if (savedUrl) {
+                APP.apiUrl = savedUrl;
+                document.getElementById('configBanner').classList.add('hidden');
+            } else {
+                document.getElementById('configBanner').classList.remove('hidden');
+            }
+        }
+
+        function saveApiUrl() {
+            const url = document.getElementById('apiUrlInput').value.trim();
+            if (!url) {
+                alert('Please enter a valid API URL!');
+                return;
+            }
+            APP.apiUrl = url;
+            localStorage.setItem('apiUrl', url);
+            document.getElementById('configBanner').classList.add('hidden');
+            loadData();
+        }
+
+        function selectRole(role) {
+            document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelector(`.role-option.${role}`).classList.add('selected');
+            document.getElementById('loginBtn').disabled = false;
+            APP.currentUser.role = role;
+        }
+
+        async function handleLogin() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!username || !password) {
+                alert('Please enter both username and password!');
+                return;
             }
             
-            renderTestCases();
-            updateSummary();
-        }
-
-        function saveTestCases() {
-            testerInfo.lastUpdated = new Date().toISOString();
-            sessionStorage.setItem('testCases', JSON.stringify(testCases));
-            sessionStorage.setItem('testerInfo', JSON.stringify(testerInfo));
-            updateSummary();
-            showSaveStatus();
-        }
-
-        function showSaveStatus() {
-            const status = document.getElementById('saveStatus');
-            status.classList.add('show');
-            setTimeout(() => status.classList.remove('show'), 2000);
-        }
-
-        function autoSave() {
-            clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(saveTestCases, 500);
-        }
-
-        function updateTesterInfo(field, value) {
-            testerInfo[field] = value;
-            saveTestCases();
-        }
-
-        function updateSummary() {
-            const total = testCases.length;
-            const passed = testCases.filter(tc => tc.status === 'pass').length;
-            const failed = testCases.filter(tc => tc.status === 'fail').length;
-            const pending = testCases.filter(tc => tc.status === 'pending').length;
-            const resolved = testCases.filter(tc => tc.status === 'fail' && tc.resolved).length;
+            if (!APP.currentUser.role) {
+                alert('Please select a role (Tester or Developer)!');
+                return;
+            }
             
-            document.getElementById('totalTests').textContent = total;
-            document.getElementById('passedTests').textContent = passed;
-            document.getElementById('failedTests').textContent = failed;
-            document.getElementById('pendingTests').textContent = pending;
-            document.getElementById('resolvedTests').textContent = resolved;
+            // Verify credentials
+            if (APP.currentUser.role === 'tester') {
+                if (username === APP.systemInfo.testerUsername && password === APP.systemInfo.testerPassword) {
+                    APP.currentUser.username = username;
+                    document.getElementById('loginModal').classList.add('hidden');
+                    updateUIForRole();
+                    showSaveStatus('✓ Logged in as Tester');
+                } else {
+                    alert('Invalid tester credentials!');
+                }
+            } else if (APP.currentUser.role === 'developer') {
+                if (username === APP.systemInfo.devUsername && password === APP.systemInfo.devPassword) {
+                    APP.currentUser.username = username;
+                    document.getElementById('loginModal').classList.add('hidden');
+                    updateUIForRole();
+                    showSaveStatus('✓ Logged in as Developer');
+                } else {
+                    alert('Invalid developer credentials!');
+                }
+            }
             
-            if (testerInfo.lastUpdated) {
-                const date = new Date(testerInfo.lastUpdated);
-                const formatted = date.toLocaleString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
+            render();
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                APP.currentUser = { role: null, username: null };
+                document.getElementById('loginModal').classList.remove('hidden');
+                document.getElementById('loginUsername').value = '';
+                document.getElementById('loginPassword').value = '';
+                document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
+                document.getElementById('loginBtn').disabled = true;
+                updateUIForRole();
+                render();
+            }
+        }
+
+        function updateUIForRole() {
+            const isTester = APP.currentUser.role === 'tester';
+            const isDeveloper = APP.currentUser.role === 'developer';
+            
+            // Update role badge
+            const badge = document.getElementById('roleBadge');
+            if (isTester) {
+                badge.textContent = '👨‍💼 Tester';
+                badge.className = 'role-badge tester';
+            } else if (isDeveloper) {
+                badge.textContent = '👨‍💻 Developer';
+                badge.className = 'role-badge developer';
+            } else {
+                badge.textContent = 'Guest';
+                badge.className = 'role-badge';
+            }
+            
+            // Show/hide developer notice
+            document.getElementById('devNotice').style.display = isDeveloper ? 'block' : 'none';
+            
+            // Enable/disable add test button
+            document.getElementById('addTestBtn').disabled = !isTester;
+            if (!isTester) {
+                document.getElementById('addTestBtn').style.display = 'none';
+            } else {
+                document.getElementById('addTestBtn').style.display = 'block';
+            }
+        }
+
+        function isTester() {
+            return APP.currentUser.role === 'tester';
+        }
+
+        function isDeveloper() {
+            return APP.currentUser.role === 'developer';
+        }
+
+        async function loadData() {
+            showLoading(true);
+            
+            try {
+                if (APP.apiUrl) {
+                    const response = await fetch(APP.apiUrl, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: 'loadData' })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        if (data.systemInfo) {
+                            APP.systemInfo = data.systemInfo;
+                            APP.isSetupComplete = true;
+                            document.getElementById('setupModal').classList.add('hidden');
+                            document.getElementById('displayName').textContent = APP.systemInfo.testerName;
+                            document.getElementById('displayDesignation').textContent = APP.systemInfo.designation;
+                            document.getElementById('displayProject').textContent = APP.systemInfo.project;
+                        }
+                        
+                        if (data.testCases) {
+                            APP.testCases = data.testCases;
+                        }
+                    }
+                } else {
+                    // Fallback to localStorage
+                    const savedInfo = localStorage.getItem('systemInfo');
+                    const savedCases = localStorage.getItem('testCases');
+                    
+                    if (savedInfo) {
+                        APP.systemInfo = JSON.parse(savedInfo);
+                        APP.isSetupComplete = true;
+                        document.getElementById('setupModal').classList.add('hidden');
+                        document.getElementById('displayName').textContent = APP.systemInfo.testerName;
+                        document.getElementById('displayDesignation').textContent = APP.systemInfo.designation;
+                        document.getElementById('displayProject').textContent = APP.systemInfo.project;
+                    }
+                    
+                    if (savedCases) {
+                        APP.testCases = JSON.parse(savedCases);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showSaveStatus('Error loading data', true);
+            }
+            
+            showLoading(false);
+        }
+
+        function setupEventListeners() {
+            document.getElementById('saveSetupBtn').addEventListener('click', handleInitialSetup);
+            document.getElementById('addTestBtn').addEventListener('click', handleAddTest);
+            
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    handleFilter(this.dataset.filter);
                 });
-                document.getElementById('lastUpdated').textContent = formatted;
-            }
+            });
         }
 
-        function addTestCase() {
-            const newTestCase = {
+        async function handleInitialSetup() {
+            const testerName = document.getElementById('setupTesterName').value.trim();
+            const testerUsername = document.getElementById('setupTesterUsername').value.trim();
+            const testerPassword = document.getElementById('setupTesterPassword').value;
+            const devUsername = document.getElementById('setupDevUsername').value.trim();
+            const devPassword = document.getElementById('setupDevPassword').value;
+            const designation = document.getElementById('setupDesignation').value.trim();
+            const project = document.getElementById('setupProject').value.trim();
+
+            // Validate all fields
+            if (!testerName || !testerUsername || !testerPassword) {
+                alert('Please fill in all Tester Account fields!');
+                switchSetupTab('tester');
+                return;
+            }
+            
+            if (!devUsername || !devPassword) {
+                alert('Please fill in all Developer Account fields!');
+                switchSetupTab('developer');
+                return;
+            }
+            
+            if (!designation || !project) {
+                alert('Please fill in Tester designation and Project name!');
+                switchSetupTab('tester');
+                return;
+            }
+
+            APP.systemInfo = {
+                testerName,
+                testerUsername,
+                testerPassword,
+                devUsername,
+                devPassword,
+                designation,
+                project,
+                lastUpdated: new Date().toISOString()
+            };
+            
+            await saveData();
+            
+            APP.isSetupComplete = true;
+            document.getElementById('setupModal').classList.add('hidden');
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('displayName').textContent = testerName;
+            document.getElementById('displayDesignation').textContent = designation;
+            document.getElementById('displayProject').textContent = project;
+            
+            // Clear form
+            document.getElementById('setupTesterName').value = '';
+            document.getElementById('setupTesterUsername').value = '';
+            document.getElementById('setupTesterPassword').value = '';
+            document.getElementById('setupDevUsername').value = '';
+            document.getElementById('setupDevPassword').value = '';
+            document.getElementById('setupDesignation').value = '';
+            document.getElementById('setupProject').value = '';
+            
+            showSaveStatus('✓ Accounts created successfully!');
+        }
+
+        function handleFilter(filterType) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-filter="${filterType}"]`).classList.add('active');
+            
+            const sections = {
+                pass: ['passedSection', 'passedContainer'],
+                fail: ['failedSection', 'failedContainer'],
+                deleted: ['deletedSection', 'deletedContainer']
+            };
+            
+            Object.entries(sections).forEach(([type, ids]) => {
+                ids.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (filterType === 'all' || filterType === type) {
+                        el.classList.remove('section-hidden');
+                    } else {
+                        el.classList.add('section-hidden');
+                    }
+                });
+            });
+        }
+
+        function handleAddTest() {
+            if (!isTester()) {
+                alert('Only testers can add test cases!');
+                return;
+            }
+            
+            APP.testCases.push({
                 id: Date.now(),
                 scenario: '',
                 steps: '',
                 expected: '',
                 actual: '',
                 type: 'functional',
-                status: 'pending',
+                status: 'pass',
                 screenshots: [],
                 developerComments: '',
                 resolved: false
-            };
-            testCases.push(newTestCase);
-            renderTestCases();
-            saveTestCases();
+            });
+            
+            saveData();
+            render();
         }
 
-        function deleteTestCase(id) {
-            if (confirm('Are you sure you want to delete this test case?')) {
-                testCases = testCases.filter(tc => tc.id !== id);
-                renderTestCases();
-                saveTestCases();
+        function handleMarkAsPass(id) {
+            if (!isTester()) {
+                alert('Only testers can change test status!');
+                return;
+            }
+            
+            const tc = APP.testCases.find(t => t.id === id);
+            if (tc) {
+                tc.status = 'pass';
+                tc.resolved = false;
+                saveData();
+                render();
             }
         }
 
-        function updateTestCase(id, field, value) {
-            const testCase = testCases.find(tc => tc.id === id);
-            if (testCase) {
-                testCase[field] = value;
+        function handleMarkAsFail(id) {
+            if (!isTester()) {
+                alert('Only testers can change test status!');
+                return;
+            }
+            
+            const tc = APP.testCases.find(t => t.id === id);
+            if (tc) {
+                tc.status = 'fail';
+                tc.resolved = false;
+                saveData();
+                render();
+            }
+        }
+
+        function handleDelete(id) {
+            if (!isTester()) {
+                alert('Only testers can delete test cases!');
+                return;
+            }
+            
+            if (confirm('Are you sure you want to delete this test case?')) {
+                const tc = APP.testCases.find(t => t.id === id);
+                if (tc) {
+                    tc.status = 'deleted';
+                    saveData();
+                    render();
+                }
+            }
+        }
+
+        function handleRestore(id) {
+            if (!isTester()) {
+                alert('Only testers can restore test cases!');
+                return;
+            }
+            
+            const tc = APP.testCases.find(t => t.id === id);
+            if (tc) {
+                tc.status = 'pass';
+                saveData();
+                render();
+            }
+        }
+
+        function handleUpdateField(id, field, value) {
+            if (!isTester()) {
+                return; // Silently ignore for developers
+            }
+            
+            const tc = APP.testCases.find(t => t.id === id);
+            if (tc) {
+                tc[field] = value;
                 autoSave();
             }
         }
 
         function handleFileUpload(id, files) {
-            const testCase = testCases.find(tc => tc.id === id);
-            if (!testCase) return;
-
+            if (!isTester()) {
+                alert('Only testers can upload screenshots!');
+                return;
+            }
+            
+            const tc = APP.testCases.find(t => t.id === id);
+            if (!tc) return;
+            
             Array.from(files).forEach(file => {
                 if (file.type.startsWith('image/')) {
                     const reader = new FileReader();
-                    reader.onload = (e) => {
-                        testCase.screenshots.push(e.target.result);
-                        renderTestCases();
-                        saveTestCases();
+                    reader.onload = e => {
+                        tc.screenshots.push(e.target.result);
+                        saveData();
+                        render();
                     };
                     reader.readAsDataURL(file);
                 }
             });
         }
 
-        function handlePaste(id, e) {
-            const items = e.clipboardData.items;
-            for (let item of items) {
-                if (item.type.indexOf('image') !== -1) {
-                    const file = item.getAsFile();
-                    handleFileUpload(id, [file]);
+        function handleRemoveScreenshot(tcId, idx) {
+            if (!isTester()) {
+                alert('Only testers can remove screenshots!');
+                return;
+            }
+            
+            const tc = APP.testCases.find(t => t.id === tcId);
+            if (tc) {
+                tc.screenshots.splice(idx, 1);
+                saveData();
+                render();
+            }
+        }
+
+        function handleToggleResolution(id, resolved) {
+            // Both tester and developer can toggle resolution
+            const tc = APP.testCases.find(t => t.id === id);
+            if (tc) {
+                tc.resolved = resolved;
+                saveData();
+                render();
+            }
+        }
+
+        function handleDevComment(id, value) {
+            // Both tester and developer can add comments
+            const tc = APP.testCases.find(t => t.id === id);
+            if (tc) {
+                tc.developerComments = value;
+                autoSave();
+            }
+        }
+
+        async function saveData() {
+            APP.systemInfo.lastUpdated = new Date().toISOString();
+            
+            // Save to localStorage as backup
+            localStorage.setItem('systemInfo', JSON.stringify(APP.systemInfo));
+            localStorage.setItem('testCases', JSON.stringify(APP.testCases));
+            
+            // Save to Google Sheets if API is configured
+            if (APP.apiUrl) {
+                try {
+                    const response = await fetch(APP.apiUrl, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            action: 'saveAll',
+                            systemInfo: APP.systemInfo,
+                            testCases: APP.testCases
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    if (result.success) {
+                        showSaveStatus('✓ Saved to Google Sheets');
+                    } else {
+                        showSaveStatus('⚠️ Saved locally only', true);
+                    }
+                } catch (error) {
+                    console.error('Save error:', error);
+                    showSaveStatus('⚠️ Saved locally only', true);
                 }
+            } else {
+                showSaveStatus('✓ Saved locally');
+            }
+            
+            updateSummary();
+        }
+
+        function autoSave() {
+            clearTimeout(APP.saveTimeout);
+            APP.saveTimeout = setTimeout(saveData, 1000);
+        }
+
+        function showSaveStatus(message = '✓ Saved', isError = false) {
+            const status = document.getElementById('saveStatus');
+            status.textContent = message;
+            if (isError) {
+                status.classList.add('error');
+            } else {
+                status.classList.remove('error');
+            }
+            status.classList.add('show');
+            setTimeout(() => status.classList.remove('show'), 3000);
+        }
+
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (show) {
+                overlay.classList.remove('hidden');
+            } else {
+                overlay.classList.add('hidden');
             }
         }
 
-        function removeScreenshot(testCaseId, screenshotIndex) {
-            const testCase = testCases.find(tc => tc.id === testCaseId);
-            if (testCase) {
-                testCase.screenshots.splice(screenshotIndex, 1);
-                renderTestCases();
-                saveTestCases();
+        function updateSummary() {
+            const total = APP.testCases.filter(tc => tc.status !== 'deleted').length;
+            const passed = APP.testCases.filter(tc => tc.status === 'pass').length;
+            const failed = APP.testCases.filter(tc => tc.status === 'fail').length;
+            const deleted = APP.testCases.filter(tc => tc.status === 'deleted').length;
+            const resolved = APP.testCases.filter(tc => tc.status === 'fail' && tc.resolved).length;
+            
+            document.getElementById('totalTests').textContent = total;
+            document.getElementById('passedTests').textContent = passed;
+            document.getElementById('failedTests').textContent = failed;
+            document.getElementById('deletedTests').textContent = deleted;
+            document.getElementById('resolvedTests').textContent = resolved;
+            
+            if (APP.systemInfo.lastUpdated) {
+                const date = new Date(APP.systemInfo.lastUpdated);
+                document.getElementById('lastUpdated').textContent = date.toLocaleString('en-US', {
+                    year: 'numeric', month: 'short', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
             }
         }
 
-        function renderTestCases() {
-            const container = document.getElementById('testCasesContainer');
-            container.innerHTML = testCases.map(tc => `
-                <div class="test-case status-${tc.status}">
-                    <div class="test-case-header">
-                        <div class="header-left">
-                            <h3>Test Case #${testCases.indexOf(tc) + 1}</h3>
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function renderTestCase(tc, idx) {
+            const canEdit = isTester();
+            const canComment = isTester() || isDeveloper();
+            const isFailed = tc.status === 'fail';
+            const isDeleted = tc.status === 'deleted';
+            
+            const buttonsHtml = canEdit ? `
+                ${tc.status !== 'fail' ? `<button class="action-btn fail-btn" onclick="handleMarkAsFail(${tc.id})">✗ Mark as Failed</button>` : ''}
+                ${tc.status !== 'pass' ? `<button class="action-btn pass-btn" onclick="handleMarkAsPass(${tc.id})">✓ Mark as Passed</button>` : ''}
+                ${tc.status !== 'deleted' ? `<button class="action-btn delete-btn" onclick="handleDelete(${tc.id})">🗑️ Delete</button>` : ''}
+                ${tc.status === 'deleted' ? `<button class="action-btn restore-btn" onclick="handleRestore(${tc.id})">↩️ Restore</button>` : ''}
+            ` : '';
+
+            const screenshotsHtml = tc.screenshots.length > 0 ? `
+                <div class="screenshots-grid">
+                    ${tc.screenshots.map((src, i) => `
+                        <div class="screenshot-item">
+                            <img src="${src}" alt="Screenshot ${i + 1}">
+                            ${canEdit && !isDeleted ? `<button class="screenshot-remove" onclick="handleRemoveScreenshot(${tc.id}, ${i})">×</button>` : ''}
                         </div>
-                        <div class="header-buttons">
-                            <select class="status-dropdown status-${tc.status}" 
-                                    onchange="updateTestCase(${tc.id}, 'status', this.value); renderTestCases()">
-                                <option value="pending" ${tc.status === 'pending' ? 'selected' : ''}>⏳ Pending</option>
-                                <option value="pass" ${tc.status === 'pass' ? 'selected' : ''}>✓ Pass</option>
-                                <option value="fail" ${tc.status === 'fail' ? 'selected' : ''}>✗ Fail</option>
-                            </select>
-                            <button class="delete-btn" onclick="deleteTestCase(${tc.id})">Delete</button>
+                    `).join('')}
+                </div>
+            ` : '';
+
+            const developerSection = isFailed ? `
+                <div class="developer-section">
+                    <div class="developer-header">
+                        <h4>👨‍💻 Developer Section</h4>
+                        <div class="resolution-toggle">
+                            <button class="resolution-btn ${!tc.resolved ? 'active-not-resolved' : ''}" 
+                                    onclick="handleToggleResolution(${tc.id}, false)"
+                                    ${!canComment ? 'disabled' : ''}>Not Resolved</button>
+                            <button class="resolution-btn ${tc.resolved ? 'active-resolved' : ''}" 
+                                    onclick="handleToggleResolution(${tc.id}, true)"
+                                    ${!canComment ? 'disabled' : ''}>Resolved</button>
                         </div>
                     </div>
+                    <textarea class="developer-comments" 
+                              placeholder="Developer comments: Add notes about the issue, root cause, fix details, etc..."
+                              oninput="handleDevComment(${tc.id}, this.value)"
+                              ${!canComment ? 'readonly' : ''}>${escapeHtml(tc.developerComments || '')}</textarea>
+                </div>
+            ` : '';
 
+            const readonlyClass = !canEdit || isDeleted ? 'readonly-field' : '';
+            const readonlyAttr = !canEdit || isDeleted ? 'readonly' : '';
+            const disabledAttr = !canEdit || isDeleted ? 'disabled' : '';
+
+            return `
+                <div class="test-case status-${tc.status}">
+                    <div class="test-case-header">
+                        <h3>Test Case #${idx + 1}</h3>
+                        <div class="header-buttons">${buttonsHtml}</div>
+                    </div>
                     <div class="form-group">
                         <label>Test Type</label>
-                        <select onchange="updateTestCase(${tc.id}, 'type', this.value)" value="${tc.type}">
+                        <select onchange="handleUpdateField(${tc.id}, 'type', this.value)" ${disabledAttr} class="${readonlyClass}">
                             <option value="functional" ${tc.type === 'functional' ? 'selected' : ''}>Functional Testing</option>
                             <option value="integration" ${tc.type === 'integration' ? 'selected' : ''}>Integration Testing</option>
                             <option value="regression" ${tc.type === 'regression' ? 'selected' : ''}>Regression Testing</option>
@@ -731,82 +1280,64 @@
                             <option value="security" ${tc.type === 'security' ? 'selected' : ''}>Security Testing</option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label>Test Scenario</label>
-                        <input type="text" placeholder="Describe the test scenario..." 
-                               value="${tc.scenario}" 
-                               onchange="updateTestCase(${tc.id}, 'scenario', this.value)">
+                        <input type="text" placeholder="Describe the test scenario..." value="${escapeHtml(tc.scenario)}" 
+                               oninput="handleUpdateField(${tc.id}, 'scenario', this.value)"
+                               ${readonlyAttr} class="${readonlyClass}">
                     </div>
-
                     <div class="form-group">
                         <label>Test Steps</label>
-                        <textarea placeholder="1. Step one&#10;2. Step two&#10;3. Step three..." 
-                                  onchange="updateTestCase(${tc.id}, 'steps', this.value)">${tc.steps}</textarea>
+                        <textarea placeholder="1. Step one&#10;2. Step two..." 
+                                  oninput="handleUpdateField(${tc.id}, 'steps', this.value)"
+                                  ${readonlyAttr} class="${readonlyClass}">${escapeHtml(tc.steps)}</textarea>
                     </div>
-
                     <div class="form-group">
                         <label>Expected Results</label>
                         <textarea placeholder="Describe what should happen..." 
-                                  onchange="updateTestCase(${tc.id}, 'expected', this.value)">${tc.expected}</textarea>
+                                  oninput="handleUpdateField(${tc.id}, 'expected', this.value)"
+                                  ${readonlyAttr} class="${readonlyClass}">${escapeHtml(tc.expected)}</textarea>
                     </div>
-
                     <div class="form-group">
                         <label>Actual Results</label>
                         <textarea placeholder="Describe what actually happened..." 
-                                  onchange="updateTestCase(${tc.id}, 'actual', this.value)">${tc.actual}</textarea>
+                                  oninput="handleUpdateField(${tc.id}, 'actual', this.value)"
+                                  ${readonlyAttr} class="${readonlyClass}">${escapeHtml(tc.actual)}</textarea>
                     </div>
-
                     <div class="form-group">
                         <label>Screenshots</label>
-                        <div class="screenshot-area" 
-                             onclick="document.getElementById('file-${tc.id}').click()"
-                             ondragover="event.preventDefault(); this.classList.add('dragover')"
-                             ondragleave="this.classList.remove('dragover')"
-                             ondrop="event.preventDefault(); this.classList.remove('dragover'); handleFileUpload(${tc.id}, event.dataTransfer.files)"
-                             onpaste="handlePaste(${tc.id}, event)">
-                            <p class="upload-text">📷 Click to upload, drag & drop, or paste (Ctrl+V) screenshots</p>
-                            <input type="file" id="file-${tc.id}" class="file-input" 
-                                   accept="image/*" multiple 
-                                   onchange="handleFileUpload(${tc.id}, this.files)">
-                        </div>
-                        ${tc.screenshots.length > 0 ? `
-                            <div class="screenshots-grid">
-                                ${tc.screenshots.map((src, index) => `
-                                    <div class="screenshot-item">
-                                        <img src="${src}" alt="Screenshot ${index + 1}">
-                                        <button class="screenshot-remove" 
-                                                onclick="removeScreenshot(${tc.id}, ${index})">×</button>
-                                    </div>
-                                `).join('')}
+                        ${canEdit && !isDeleted ? `
+                            <div class="screenshot-area" onclick="document.getElementById('fileInput-${tc.id}').click()">
+                                <p>📷 Click to upload or drag & drop screenshots</p>
+                                <input type="file" id="fileInput-${tc.id}" class="file-input" accept="image/*" multiple onchange="handleFileUpload(${tc.id}, this.files)">
                             </div>
                         ` : ''}
+                        ${screenshotsHtml}
                     </div>
-
-                    ${tc.status === 'fail' ? `
-                        <div class="developer-section">
-                            <div class="developer-header">
-                                <h4>👨‍💻 Developer Section</h4>
-                                <div class="resolution-toggle">
-                                    <button class="resolution-btn ${!tc.resolved ? 'active-not-resolved' : ''}" 
-                                            onclick="updateTestCase(${tc.id}, 'resolved', false); renderTestCases()">
-                                        Not Resolved
-                                    </button>
-                                    <button class="resolution-btn ${tc.resolved ? 'active-resolved' : ''}" 
-                                            onclick="updateTestCase(${tc.id}, 'resolved', true); renderTestCases()">
-                                        Resolved
-                                    </button>
-                                </div>
-                            </div>
-                            <textarea class="developer-comments" 
-                                      placeholder="Developer comments: Add notes about the issue, root cause, fix details, etc..."
-                                      onchange="updateTestCase(${tc.id}, 'developerComments', this.value)">${tc.developerComments || ''}</textarea>
-                        </div>
-                    ` : ''}
+                    ${developerSection}
                 </div>
-            `).join('');
+            `;
+        }
+
+        function render() {
+            const passedTests = APP.testCases.filter(tc => tc.status === 'pass');
+            const failedTests = APP.testCases.filter(tc => tc.status === 'fail');
+            const deletedTests = APP.testCases.filter(tc => tc.status === 'deleted');
+            
+            document.getElementById('passedContainer').innerHTML = passedTests.length > 0 
+                ? passedTests.map((tc, idx) => renderTestCase(tc, idx)).join('')
+                : '<div class="empty-section">No passed tests yet</div>';
+
+            document.getElementById('failedContainer').innerHTML = failedTests.length > 0 
+                ? failedTests.map((tc, idx) => renderTestCase(tc, idx)).join('')
+                : '<div class="empty-section">No failed tests</div>';
+
+            document.getElementById('deletedContainer').innerHTML = deletedTests.length > 0 
+                ? deletedTests.map((tc, idx) => renderTestCase(tc, idx)).join('')
+                : '<div class="empty-section">No deleted tests</div>';
             
             updateSummary();
+            updateUIForRole();
         }
     </script>
 </body>
